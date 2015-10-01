@@ -32,8 +32,10 @@ func main() {
 	fmt.Println(line)
 	fmt.Printf("Create %d key / value pairs\n", nKeys)
 	for i:=int64(0); i < nKeys; i++ {
-		//m["key"+string(i)]="value"+string(i)
 		store.Put("key"+string(i), "value"+string(i))
+		if i < i-1 {
+			fmt.Println("Overflow: ", i);
+		}
 	}
 	fmt.Println("Time: ", time.Since(start),
 		"time per key: ", time.Since(start).Nanoseconds()/int64(nKeys), "ns")
@@ -43,7 +45,6 @@ func main() {
 	fmt.Println(line)
 	fmt.Printf("Do %d random writes\n", nRndWrites)
 	for i:=int64(0); i < nRndWrites; i++ {
-		//m["key"+string(rand.Intn(nKeys))]="random write"+string(i)
 		store.Put("key"+string(rand.Int63n(nKeys)), "random write"+string(i))
 	}
 	fmt.Println("Time: ", time.Since(start),
@@ -55,7 +56,6 @@ func main() {
 	fmt.Printf("Do %d random reads\n", nRndReads)
 	tmp := ""
 	for i:=int64(0); i < nRndReads; i++ {
-		//tmp = m["key"+string(rand.Intn(nKeys))]
 		tmp = store.Get("key"+string(rand.Int63n(nKeys)))
 	}
 	// use it or get en error :)
