@@ -69,6 +69,26 @@ func main() {
 	fmt.Println("Time: ", time.Since(start),
 		"time per read: ", time.Since(start).Nanoseconds()/int64(nRndReads), "ns")
 
+	// check random tuple
+	start = time.Now()
+	fmt.Println(line)
+	fmt.Printf("Do %d random tuple checks\n", nRndReads)
+	for i := int64(0); i < nRndReads; i++ {
+		store.Exists("key" + strconv.FormatInt(rand.Int63n(nKeys), 10))
+	}
+	fmt.Println("Time: ", time.Since(start),
+		"time per check: ", time.Since(start).Nanoseconds()/int64(nRndReads), "ns")
+
+	// check random tuple
+	start = time.Now()
+	fmt.Println(line)
+	fmt.Printf("Do %d random tuple checks on NONEXISTING tuples\n", nRndReads)
+	for i := int64(0); i < nRndReads; i++ {
+		store.Exists("NOTHERE" + strconv.FormatInt(rand.Int63n(nKeys), 10))
+	}
+	fmt.Println("Time: ", time.Since(start),
+		"time per check: ", time.Since(start).Nanoseconds()/int64(nRndReads), "ns")
+
 	// some info
 	fmt.Println(line)
 	fmt.Println("Size of kvs is: ", store.Len())
